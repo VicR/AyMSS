@@ -1,0 +1,56 @@
+#include <iostream>
+using namespace std;
+
+/*class Hora {
+	private:
+		Hora();
+		int Hora* inst;
+	public:
+		time_t hora;
+		cout << "Hora: " << ctt;
+};
+
+int main()
+{
+	Hora hora1;
+	time(&hora);
+}*/
+
+class Hora {
+	private:
+		Hora()
+		{
+			instance = this;
+		}
+		static Hora* instance;
+
+	public:
+		void getTime()
+		{
+			cout << instance << endl;
+		};
+
+		static Hora* getInstance()
+		{
+			if (instance != 0)
+				return instance;
+			else
+				Hora();
+			
+			return instance;
+			//////////////////
+			//static Hora instance;
+			//return &instance;
+		}
+};
+
+Hora* Hora::instance = 0;
+
+int main()
+{
+	Hora* h = Hora::getInstance();
+	h->getTime();
+	Hora* hh = Hora::getInstance();
+	hh->getTime();
+	delete h;
+}
