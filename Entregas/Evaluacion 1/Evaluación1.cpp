@@ -3,198 +3,157 @@
 #include <string>
 #include <vector>
 #include <stack>
+#include <algorithm>
+#include "Videojuego.h"
+#include "Inventario.h"
 using namespace std;
 
-class Videojuego
+Videojuego::Videojuego(){}
+Videojuego::Videojuego(int noSerie, string nombre, float precio, string clasificacion, string plataforma);
 {
-private:
-	int noSerie;
-	string Nombre;
-	int fechaCreacion;
-	string clasificacion;
-	int plataforma;
-
-public:
-	virtual Videojuego* clonar() = 0;
-	virtual void Concepcion() = 0;
-	virtual void Diseño () = 0;
-	virtual void Planificacion() = 0;
-	virtual void Produccion() = 0;
-	virtual void Pruebas() = 0;
-};
-template <class SubClase>
-class ClonVideojuego : public Videojuego
-{
-public:
-	virtual Videojuego* clonar()
-	{
-		return new SubClase(dynamic_cast<SubClase&>(*this));
-	}
-};
-
-template <class SubClase>
-SubClase* factoryMethod(string nombre)
-{
-	SubClase* fm = new SubClase(nombre);
-	fm->subClase::Concepcion;
-	fm->subClase::Diseño;
-	fm->subClase::Planificacion;
-	fm->subClase::Produccion;
-	fm->subClase::Pruebas;
-	return fm;
+	NoSerie = _noSerie;
+	Nombre = _nombre;
+	precio = _precio;
+	clasificacion = _clasificacion;
+	plataforma = _plataforma;
+}
+int Videojuego::getNoSerie(){ 
+	return noSerie; 
+}
+string Videojuego::getNombre(){ 
+	return nombre; 
+}
+float Videojuego::getPrecio(){ 
+	return precio; 
+}
+string Videojuego::getClasificacion(){ 
+	return clasificacion; 
+}
+string Videojuego::getPlataforma(){ 
+	return plataforma; 
 }
 
-class Estrategia : public ClonVideojuego<Estrategia>
-{
-public:
-	Estrategia(string nombre)
-	{
-		name = nombre;
-	}
-	virtual void Concepcion()
-	{
-		cout << "Juego de estrategia en concepcion" << endl;
-	}
-	virtual void Diseño()
-	{
-		cout << "Juego de estrategia en diseño" << endl;
-	}
-	virtual void Planificacion()
-	{
-		cout << "Juego de estrategia en planificacion" << endl;
-	}
-	virtual void Produccion()
-	{
-		cout << "Juego de estrategia en produccion" << endl;
-	}
-	virtual void Pruebas()
-	{
-		cout << "Juego de estrategia en pruebas" << endl;
-	}
-};
 
-class Aventura : public ClonVideojuego<Aventura>
-{
-public:
-	Aventura(string nombre)
-	{
-		name = nombre;
-	}
-	virtual void Concepcion()
-	{
-		cout << "Juego de aventura en concepcion" << endl;
-	}
-	virtual void Diseño()
-	{
-		cout << "Juego de aventura en diseño" << endl;
-	}
-	virtual void Planificacion()
-	{
-		cout << "Juego de aventura en planificacion" << endl;
-	}
-	virtual void Produccion()
-	{
-		cout << "Juego de aventura en produccion" << endl;
-	}
-	virtual void Pruebas()
-	{
-		cout << "Juego de aventura en pruebas" << endl;
-	}
-};
+Videojuego* Videojuego::clonar(){}
+void Videojuego::Concepcion(){}
+void Videojuego::Diseño(){}
+void Videojuego::Planificacion(){}
+void Videojuego::Produccion(){}
+void Videojuego::Pruebas(){}
 
-class Aprendizaje : public ClonVideojuego<Aprendizaje>
+bool Videojuego::operator < (const Videojuego &tmp) const
 {
-private:
-
-public:
-	Aprendizaje(string nombre)
-{
-	name = nombre;
+	if (precio < tmp.precio)
+		return true;
+	else
+		return false;
 }
-	virtual void Concepcion()
-	{
-		cout << "Juego de aprendizaje en concepcion" << endl;
-	}
-	virtual void Diseño()
-	{
-		cout << "Juego de aprendizaje en diseño" << endl;
-	}
-	virtual void Planificacion()
-	{
-		cout << "Juego de aprendizaje en planificacion" << endl;
-	}
-	virtual void Produccion()
-	{
-		cout << "Juego de aprendizaje en produccion" << endl;
-	}
-	virtual void Pruebas()
-	{
-		cout << "Juego de aprendizaje en pruebas" << endl;
-	}
-};
-
 ///////////////////////////////////////////////////////////////
 
-class Inventario{
-private:
-	int totalItems;
-	Inventario()
-	{
-		Instance = this;
-	}
-	static Inventario* Instance;
+Inventario* Inventario::Instance = NULL;
+unsigned Inventario::NewSN = 1;
 
-public:
-	static Inventario* crear()
+
+Inventario::Inventario(){}
+Inventario* Inventario::crear()
+{
+	if (Instance == NULL)
 	{
-		if (Instance == NULL)
+		Instance = new Inventario;
+	}
+	return Instance;
+}
+
+void Inventario::agregarJuego(string _nombre, float precio, string clasificacion, string plataforma)
+{
+	string nombre;
+	float precio;
+	string clasificacion;
+	string plataforma;
+
+	cout << endl << "Nombre del juego: ";
+	cin >> nombre;
+	cout << endl << "Precio del juego: ";
+	cin >> precio;
+	cout << endl << "Clasificacion del juego (E,T,M,Ao):  ";
+	cin >> clasificacion;
+	cout << endl << "Plataforma del juego: ";
+	cin >> plataforma;
+	Inventario->agregarVideojuego(nombre, precio, clasificacion, plataforma);
+	NewSN++;
+	gameList.push_back(nombre, precio, clasificacion, plataforma);
+}
+
+void Inventario::eliminarJuego(int noSerie)
+{
+	for (unsigned i = 0; i<gameList.size(); i++)
+	{
+		if (noSerie == gameList[i].getNoSerie())
 		{
-			Inventario();
-			return Instance;
+			eliminar.push(gameList[i]);
+			gameList.erase(gameList.begin() + i);
 		}
-		return Instance;
 	}
-
-	void agregarJuego();
-	void eliminarJuego();
-	void undo();
-	void ordenar();
-	void buscar();
-	void printAll();
-};
-
-void agregarJuego(){
-
 }
-void eliminarJuego(){
-	stack<string> undo;
-	undo.push();
-}
-void undo(){
-	cout << undo.top() << endl;
-	undo.pop;
-	cout << undo.top() << endl;
-	undo.pop;
-	cout << undo.top() << endl;
-	undo.pop;
-}
-void ordenar(){
 
-}
-void buscar(){
+void Inventario::ordenar(bool menorAmayor)
+{
 
-}
-void printAll(){
 
 }
 
+Videojuego Inventario::buscar(int noSerie)
+{
+	for (unsigned i = 0; i<gameList.size(); i++)
+	{
+		if (noSerie == gameList[i].getNoSerie())
+			return gameList[i];
+	}
+}
+
+void Inventario::undo()
+{
+	for (int i = 0; i<3; i++)
+	{
+		if (eliminar.size()>0)
+		{
+			gameList.push_back(operacionesEliminar.top());
+			operacionesEliminar.pop();
+		}
+		else
+			break;
+	}
+}
+
+void Inventario::printAll()
+{
+	for (unsigned i = 0; i<gameList.size(); i++)
+	{
+		cout << gameList[i].getNoSerie() << " " << gameList[i].getNombre() << " " << gameList[i].getPrecio() << " " << gameList[i].getClasificacion() << " " << gameList[i].getPlataforma() << endl;
+	}
+	cout << endl;
+}
+
+unsigned Inventario::getAllItems()
+{
+	return gameList.size();
+}
 ///////////////////////////////////////////////////////////////
 
 int main()
 {
+	string op;
 	cout << " || Chell A.S. || " << endl;
 	cout << "Elija una opcion:" << endl;
-	cout << "a) Crear inventario" << endl;
-	cout << "b) Crear videojuego" << endl;
+	cout << "a) Agregar videojuego" << endl;
+	cout << "b) Eliminar videojuego" << endl;
+	cout << "c) Buscar videojuego" << endl;
+	cout << "d) Ordenar inventario" << endl;
+	cout << "e) Desplegar todo el invemtario" << endl;
+	cout << "f) Ver tamaño de invetario" << endl;
+	cout << "c) Re-hacer una opcion" << endl;
+	cout << endl << "Seleccion: ";
+	cin >> op;
+	cout << endl;
 	return 0;
 }
