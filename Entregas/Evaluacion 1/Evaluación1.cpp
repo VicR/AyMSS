@@ -113,15 +113,7 @@ Videojuego Inventario::buscar(int noSerie)
 
 void Inventario::undo()
 {
-	for (int i = 0; i<3; i++)
-	{
-		if (eliminar.size()>0)
-		{
 
-		}
-		else
-			break;
-	}
 }
 
 void Inventario::printAll()
