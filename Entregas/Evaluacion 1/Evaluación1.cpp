@@ -117,8 +117,7 @@ void Inventario::undo()
 	{
 		if (eliminar.size()>0)
 		{
-			gameList.push_back(operacionesEliminar.top());
-			operacionesEliminar.pop();
+
 		}
 		else
 			break;
