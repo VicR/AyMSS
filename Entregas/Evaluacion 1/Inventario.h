@@ -8,7 +8,7 @@ private:
 	Inventario();
 	static Inventario* Instance;
 	vector<Videojuego> gameList;
-	stack<Videojuego> operacionesEliminar;
+	stack<Videojuego> Eliminar;
 	int noItems;
 	unsigned NewSN;
 
