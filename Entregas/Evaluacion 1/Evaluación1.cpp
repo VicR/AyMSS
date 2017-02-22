@@ -90,7 +90,7 @@ void Inventario::eliminarJuego(int noSerie)
 	{
 		if (noSerie == gameList[i].getNoSerie())
 		{
-			eliminar.push(gameList[i]);
+			Eliminacion.push(gameList[i]);
 			gameList.erase(gameList.begin() + i);
 		}
 	}
